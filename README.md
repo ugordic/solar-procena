@@ -6,7 +6,7 @@ Alat za brzu prethodnu procenu isplativosti krovnih solarnih elektrana za privre
 
 ![Primer rezultata: proizvodni objekat u Kragujevcu](snimak.png)
 
-*Primer: proizvodni objekat u Kragujevcu, 100 MWh godišnje, rad pon–pet 9–17 i subotom 8–13.*
+*Primer: proizvodni objekat u Kragujevcu, 100 MWh godišnje, radno vreme: pon–pet 9–17 i subotom 8–13.*
 
 ## Namena
 Prvi korak u odlučivanju o investiciji: da li solarna elektrana ima smisla za dati objekat, koje je okvirne snage i za koliko se investicija vraća. Rezultat služi kao osnova za detaljnu analizu i razgovor sa izvođačem.

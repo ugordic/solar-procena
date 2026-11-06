@@ -4,7 +4,7 @@ Web alat koji za par sekundi daje okvirnu procenu isplativosti solarne elektrane
 
 **👉 Probajte aplikaciju: [solar-procena-ugordic.streamlit.app](https://solar-procena-ugordic.streamlit.app/)**
 
-![Primer rezultata: proizvodna firma u Kragujevcu](snimak.png)
+![Primer rezultata: Proizvodni objekat u Kragujevcu](snimak.png)
 
 *Primer: proizvodna firma u Kragujevcu, 100 MWh godišnje, rad pon–pet 9–17 i subotom 8–13.*
 

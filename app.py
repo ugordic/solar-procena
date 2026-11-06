@@ -9,9 +9,9 @@ import pvlib
 import streamlit as st
 
 # ================== PODEŠAVANJA (menjaš ti, ne posetilac) ==================
-KONTAKT_IME = 'Ime Prezime'
-KONTAKT_EMAIL = 'vas.email@primer.com'
-KONTAKT_TELEFON = ''                    # npr. '+381 6x xxx xxxx', ili prazno
+KONTAKT_IME = 'Uros Gordic'
+KONTAKT_EMAIL = 'ugordic@gmail.com'
+KONTAKT_TELEFON = '+381 69 8449661'                    # npr. '+381 6x xxx xxxx', ili prazno
 
 NAGIB = 30                              # nagib panela [°]
 AZIMUT = 180                            # jug

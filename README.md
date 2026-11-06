@@ -18,6 +18,14 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
+## Kontakt na stranici (Streamlit Secrets)
+Kontakt se ne upisuje u kod, jer je kod javan. Na share.streamlit.io: aplikacija → ⋮ → **Settings** → **Secrets**, pa upisati:
+```
+KONTAKT_IME = "Ime Prezime"
+KONTAKT_EMAIL = "email@primer.com"
+KONTAKT_TELEFON = "+381 ..."
+```
+
 ## Napomena
 Rezultat je okvirna procena, a ne ponuda ni tehnički projekat. Za detaljnu analizu (stvarni podaci sa brojila, baterija, scenariji cena, izveštaj) koristi se proširena verzija modela.
 

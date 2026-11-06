@@ -9,9 +9,17 @@ import pvlib
 import streamlit as st
 
 # ================== PODEŠAVANJA (menjaš ti, ne posetilac) ==================
-KONTAKT_IME = 'Uros Gordic'
-KONTAKT_EMAIL = 'ugordic@gmail.com'
-KONTAKT_TELEFON = '+381 69 8449661'                    # npr. '+381 6x xxx xxxx', ili prazno
+# Kontakt se NE upisuje ovde (kod je javan na GitHub-u), nego u Streamlit Secrets:
+# share.streamlit.io -> aplikacija -> Settings -> Secrets. Vidi README.
+def tajna(kljuc, podrazumevano=''):
+    try:
+        return st.secrets.get(kljuc, podrazumevano)
+    except Exception:
+        return podrazumevano
+
+KONTAKT_IME = tajna('KONTAKT_IME', 'Ime Prezime')
+KONTAKT_EMAIL = tajna('KONTAKT_EMAIL', 'vas.email@primer.com')
+KONTAKT_TELEFON = tajna('KONTAKT_TELEFON', '')
 
 NAGIB = 30                              # nagib panela [°]
 AZIMUT = 180                            # jug

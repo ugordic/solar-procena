@@ -16,20 +16,6 @@ Web alat koji za par sekundi daje okvirnu procenu isplativosti solarne elektrane
 4. Za svaki sat u godini poredi proizvodnju i potrošnju: sopstvena potrošnja, višak, struja iz mreže.
 5. Računa novčani tok za 25 godina, NPV i period povrata, i bira snagu sa najvećim NPV-om kad se višak ne prodaje (oprezna preporuka).
 
-## Pokretanje lokalno
-```
-pip install -r requirements.txt
-streamlit run app.py
-```
-
-## Kontakt na stranici (Streamlit Secrets)
-Kontakt se ne upisuje u kod, jer je kod javan. Na share.streamlit.io: aplikacija → ⋮ → **Settings** → **Secrets**, pa upisati:
-```
-KONTAKT_IME = "Ime Prezime"
-KONTAKT_EMAIL = "email@primer.com"
-KONTAKT_TELEFON = "+381 ..."
-```
-
 ## Napomena
 Rezultat je okvirna procena, a ne ponuda ni tehnički projekat. Za detaljnu analizu (stvarni podaci sa brojila, baterija, scenariji cena, izveštaj) koristi se proširena verzija modela.
 
@@ -40,3 +26,7 @@ Rezultat je okvirna procena, a ne ponuda ni tehnički projekat. Za detaljnu anal
 **Live app: [solar-procena-ugordic.streamlit.app](https://solar-procena-ugordic.streamlit.app/)**
 
 A web tool that gives a rough estimate of rooftop solar profitability for businesses in Serbia: PVGIS irradiance + pvlib model, hourly self-consumption balance and a 25-year cash flow (NPV, payback). The recommended size maximizes NPV assuming surplus energy is not sold (conservative).
+
+---
+
+<sub>Za programere: lokalno pokretanje `pip install -r requirements.txt` pa `streamlit run app.py`. Kontakt prikazan u aplikaciji čita se iz Streamlit Secrets (`KONTAKT_IME`, `KONTAKT_EMAIL`, `KONTAKT_TELEFON`).</sub>

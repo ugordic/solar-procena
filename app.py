@@ -9,9 +9,9 @@ import pvlib
 import streamlit as st
 
 # ================== PODEŠAVANJA (menjaš ti, ne posetilac) ==================
-KONTAKT_IME = 'Uros Gordic'
-KONTAKT_EMAIL = 'ugordic.@gmail.com'
-KONTAKT_TELEFON = '+381 69844 9661'                    # npr. '+381 69844 9661', ili prazno
+KONTAKT_IME = 'Ime Prezime'
+KONTAKT_EMAIL = 'vas.email@primer.com'
+KONTAKT_TELEFON = ''                    # npr. '+381 6x xxx xxxx', ili prazno
 
 NAGIB = 30                              # nagib panela [°]
 AZIMUT = 180                            # jug
@@ -33,13 +33,6 @@ GRADOVI = {                             # (lat, lon, nadmorska visina) okvirno, 
     'Valjevo': (44.27, 19.89, 185), 'Šabac': (44.75, 19.69, 80), 'Smederevo': (44.66, 20.93, 80),
     'Leskovac': (42.99, 21.95, 228), 'Vranje': (42.55, 21.90, 487), 'Užice': (43.86, 19.84, 411),
     'Sombor': (45.77, 19.11, 88), 'Zaječar': (43.90, 22.27, 144),
-}
-TIPOVI_RADA = {
-    'Kancelarija / proizvodnja (pon–pet 7–15, sub 7–13)': {**{d: (7, 15) for d in range(5)}, 5: (7, 13)},
-    'Dve smene (pon–pet 6–22)': {d: (6, 22) for d in range(5)},
-    'Trgovina (pon–sub 8–20)': {d: (8, 20) for d in range(6)},
-    'Ugostiteljstvo (svaki dan 12–23)': {d: (12, 23) for d in range(7)},
-    'Neprekidan rad (24/7)': {d: (0, 24) for d in range(7)},
 }
 MESECI = ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Avg', 'Sep', 'Okt', 'Nov', 'Dec']
 
@@ -114,31 +107,37 @@ st.title('☀️ Da li se vašoj firmi isplati solarna elektrana?')
 st.write('Unesite nekoliko podataka i za par sekundi dobićete okvirnu procenu: koliku elektranu, '
          'koliko košta, koliko štedi i za koliko godina se vraća.')
 
-with st.form('unos'):
-    grad = st.selectbox('Lokacija', list(GRADOVI) + ['Druga lokacija (unos koordinata)'])
-    if grad.startswith('Druga'):
-        c1, c2 = st.columns(2)
-        lat = c1.number_input('Geografska širina', value=44.81, format='%.4f')
-        lon = c2.number_input('Geografska dužina', value=20.46, format='%.4f')
-        visina = 150
-    else:
-        lat, lon, visina = GRADOVI[grad]
+grad = st.selectbox('Lokacija', list(GRADOVI) + ['Druga lokacija (unos koordinata)'])
+if grad.startswith('Druga'):
+    c1, c2 = st.columns(2)
+    lat = c1.number_input('Geografska širina', value=44.81, format='%.4f')
+    lon = c2.number_input('Geografska dužina', value=20.46, format='%.4f')
+    visina = 150
+else:
+    lat, lon, visina = GRADOVI[grad]
 
-    nacin = st.radio('Potrošnja struje', ['Godišnja (jedan broj)', 'Po mesecima (sa računa)'], horizontal=True)
-    if nacin.startswith('Godišnja'):
-        godisnje = st.number_input('Godišnja potrošnja [kWh]', min_value=1000, value=100000, step=1000)
-        mesecno = [godisnje / 12] * 12
-    else:
-        tab = st.data_editor(pd.DataFrame({'Mesec': MESECI, 'kWh': [8000] * 12}), hide_index=True,
-                             disabled=['Mesec'])
-        mesecno = tab['kWh'].astype(float).tolist()
+nacin = st.radio('Potrošnja struje', ['Godišnja (jedan broj)', 'Po mesecima (sa računa)'], horizontal=True)
+if nacin.startswith('Godišnja'):
+    godisnje = st.number_input('Godišnja potrošnja [kWh]', min_value=1000, value=100000, step=1000)
+    mesecno = [godisnje / 12] * 12
+else:
+    tab = st.data_editor(pd.DataFrame({'Mesec': MESECI, 'kWh': [8000] * 12}), hide_index=True,
+                         disabled=['Mesec'])
+    mesecno = tab['kWh'].astype(float).tolist()
 
-    tip = st.selectbox('Kada firma radi?', list(TIPOVI_RADA))
-    cena = st.number_input('Cena struje [€/kWh], ukupno sa računa, bez PDV-a', min_value=0.03, max_value=0.60,
-                           value=0.15, step=0.01, format='%.2f')
-    prodaja = st.checkbox(f'Firma bi prodavala višak struje (procena {br(CENA_VISKA_PRODAJA, 2)} €/kWh)', value=False)
-    krov = st.number_input('Najveća snaga koja staje na krov [kWp], 0 ako ne znate', min_value=0, value=0, step=5)
-    poslato = st.form_submit_button('Izračunaj', type='primary')
+st.markdown('**Kada firma radi?**')
+radni = st.slider('Radnim danima (ponedeljak–petak), od–do [h]', 0, 24, (8, 16))
+c1, c2 = st.columns(2)
+subota = c1.selectbox('Subota', ['Ne radi', 'Radi'])
+sub_vreme = c1.slider('Subotom od–do [h]', 0, 24, (8, 13), disabled=(subota == 'Ne radi'))
+nedelja = c2.selectbox('Nedelja', ['Ne radi', 'Radi'])
+ned_vreme = c2.slider('Nedeljom od–do [h]', 0, 24, (8, 13), disabled=(nedelja == 'Ne radi'))
+st.caption('Dve smene: 6–22. Neprekidan rad: 0–24 i subota i nedelja 0–24.')
+cena = st.number_input('Cena struje [€/kWh], ukupno sa računa, bez PDV-a', min_value=0.03, max_value=0.60,
+                       value=0.15, step=0.01, format='%.2f')
+prodaja = st.checkbox(f'Firma bi prodavala višak struje (procena {br(CENA_VISKA_PRODAJA, 2)} €/kWh)', value=False)
+krov = st.number_input('Najveća snaga koja staje na krov [kWp], 0 ako ne znate', min_value=0, value=0, step=5)
+poslato = st.button('Izračunaj', type='primary')
 
 if not poslato:
     st.caption('Proizvodnja se računa iz satelitskih podataka o zračenju (PVGIS, Evropska komisija) za izabranu lokaciju.')
@@ -148,13 +147,25 @@ if sum(mesecno) <= 0:
     st.error('Unesite potrošnju veću od nule.')
     st.stop()
 
+radno_vreme = {d: radni for d in range(5)}
+if subota == 'Radi':
+    radno_vreme[5] = sub_vreme
+if nedelja == 'Radi':
+    radno_vreme[6] = ned_vreme
+radno_vreme = {d: v for d, v in radno_vreme.items() if v[1] > v[0]}
+if not radno_vreme:
+    st.error('Izaberite radno vreme u kome je kraj posle početka.')
+    st.stop()
+dani_kratko = ['pon', 'uto', 'sre', 'čet', 'pet', 'sub', 'ned']
+opis_rada = ', '.join(f'{dani_kratko[d]} {od}–{do} h' for d, (od, do) in radno_vreme.items())
+
 with st.spinner('Preuzimam podatke o Suncu za lokaciju i računam...'):
     try:
         pv1 = proizvodnja_po_kwp(lat, lon, visina)
     except Exception:
         st.error('Podaci o zračenju (PVGIS) trenutno nisu dostupni. Pokušajte ponovo za par minuta.')
         st.stop()
-    potr = profil_potrosnje(pv1.index, mesecno, TIPOVI_RADA[tip])
+    potr = profil_potrosnje(pv1.index, mesecno, radno_vreme)
     cena_viska = CENA_VISKA_PRODAJA if prodaja else 0.0
 
     # Snage za proveru: do 1,5 puta snage koja bi godišnje pokrila svu potrošnju
@@ -231,7 +242,7 @@ with st.expander('Pretpostavke'):
 - Cena elektrane ključ u ruke {CENA_SOLARA} €/kWp, održavanje {br(ODRZAVANJE * 100)} % investicije godišnje.
 - Cena struje raste {br(RAST_CENE * 100)} % godišnje, paneli gube {br(DEGRADACIJA * 100, 1)} % snage godišnje, vek {VEK} godina.
 - NPV uz diskontnu stopu {br(DISKONTNA_STOPA * 100)} %. Bez kredita, poreza i troškova angažovane snage.
-- Potrošnja je raspoređena po satima prema izabranom radnom vremenu; van radnog vremena firma troši {br(BAZNA_UDEO * 100)} % potrošnje u radno vreme.
+- Potrošnja je raspoređena po satima prema radnom vremenu ({opis_rada}); van radnog vremena firma troši {br(BAZNA_UDEO * 100)} % potrošnje u radno vreme.
 - Proizvodnja: tipična meteorološka godina iz PVGIS-a (Evropska komisija), model pvlib. Lokalne senke nisu uračunate.
 - Rezultat je okvirna procena, a ne ponuda ni tehnički projekat.
 ''')

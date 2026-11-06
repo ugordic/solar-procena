@@ -2,6 +2,10 @@
 
 Web alat koji za par sekundi daje okvirnu procenu isplativosti solarne elektrane na krovu firme u Srbiji.
 
+**👉 Probajte aplikaciju: [solar-procena-ugordic.streamlit.app](https://solar-procena-ugordic.streamlit.app/)**
+
+![Primer rezultata: firma u Kragujevcu, 100 MWh godišnje, rad pon–pet 9–17 i subotom](snimak.png)
+
 **Ulaz:** lokacija, potrošnja struje (godišnja ili po mesecima), radno vreme firme, cena struje, prodaja viška, površina krova.
 **Izlaz:** preporučena snaga, investicija, godišnja ušteda, period povrata, mesečni bilans i zarada u zavisnosti od snage.
 
@@ -32,5 +36,7 @@ Rezultat je okvirna procena, a ne ponuda ni tehnički projekat. Za detaljnu anal
 ---
 
 # Solar for businesses: quick feasibility estimate
+
+**Live app: [solar-procena-ugordic.streamlit.app](https://solar-procena-ugordic.streamlit.app/)**
 
 A web tool that gives a rough estimate of rooftop solar profitability for businesses in Serbia: PVGIS irradiance + pvlib model, hourly self-consumption balance and a 25-year cash flow (NPV, payback). The recommended size maximizes NPV assuming surplus energy is not sold (conservative).

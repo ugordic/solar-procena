@@ -184,8 +184,10 @@ with st.spinner('Preuzimam podatke o Suncu za lokaciju i računam...'):
     # Preporuka: najveći NPV kad se višak NE prodaje (oprezno), pa prikaz sa izabranom cenom viška
     opr = [analiza(k, pv1, potr, cena, 0.0) for k in snage]
     kwp_prep = max(opr, key=lambda r: r['npv'])['kwp']
-    if krov:
-        kwp_prep = min(kwp_prep, krov)
+    # Zaokruživanje na 5 kWp (vrh krive je ravan, a niko ne gradi npr. 57 kWp)
+    kwp_prep = max(5, int(5 * round(kwp_prep / 5)))
+    if krov and kwp_prep > krov:
+        kwp_prep = max(5, int(5 * (krov // 5))) if krov >= 5 else krov
     r = analiza(kwp_prep, pv1, potr, cena, cena_viska)
     sve = [analiza(k, pv1, potr, cena, cena_viska) for k in snage]
 
